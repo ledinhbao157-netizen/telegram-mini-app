@@ -5,52 +5,118 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Telegram Mini App</title>
+    <title>Mini App</title>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
+            min-height: 100vh;
             font-family: Arial, sans-serif;
             background: var(--tg-theme-bg-color, #111827);
-            color: var(--tg-theme-text-color, white);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            color: var(--tg-theme-text-color, #ffffff);
         }
 
         .container {
-            width: 90%;
-            max-width: 400px;
+            width: 100%;
+            max-width: 480px;
+            margin: auto;
+            padding: 25px 18px;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            margin: auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: #229ED9;
+        }
+
+        .header h1 {
+            margin: 15px 0 5px;
+            font-size: 26px;
+        }
+
+        .header p {
+            margin: 0;
+            opacity: 0.7;
         }
 
         .card {
-            padding: 30px 20px;
+            background: var(
+                --tg-theme-secondary-bg-color,
+                #1f2937
+            );
+
             border-radius: 20px;
-            background: var(--tg-theme-secondary-bg-color, #1f2937);
+            padding: 22px;
+            margin-bottom: 18px;
         }
 
-        h1 {
-            margin-bottom: 10px;
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 18px;
         }
 
-        p {
-            line-height: 1.6;
+        .info {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px 0;
+            border-bottom: 1px solid rgba(128,128,128,0.2);
+        }
+
+        .info:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            opacity: 0.65;
+        }
+
+        .value {
+            font-weight: bold;
+            max-width: 60%;
+            overflow-wrap: anywhere;
+            text-align: right;
         }
 
         button {
             width: 100%;
-            padding: 15px;
-            margin-top: 20px;
+            padding: 16px;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             background: #229ED9;
             color: white;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .status {
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.65;
+            margin-top: 18px;
         }
     </style>
 </head>
@@ -58,56 +124,135 @@
 <body>
 
 <div class="container">
-    <div class="card">
 
-        <h1>👋 Xin chào!</h1>
+    <div class="header">
 
-        <p id="user-info">
-            Đang kết nối với Telegram...
+        <div class="avatar" id="avatar">
+            👤
+        </div>
+
+        <h1 id="welcome">
+            Xin chào 👋
+        </h1>
+
+        <p>
+            Telegram Mini App
         </p>
 
-        <button onclick="showUser()">
-            Kiểm tra tài khoản
-        </button>
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-title">
+            👤 Thông tin tài khoản
+        </div>
+
+        <div class="info">
+            <span class="label">Tên</span>
+            <span class="value" id="name">
+                Đang tải...
+            </span>
+        </div>
+
+        <div class="info">
+            <span class="label">Username</span>
+            <span class="value" id="username">
+                Đang tải...
+            </span>
+        </div>
+
+        <div class="info">
+            <span class="label">Telegram ID</span>
+            <span class="value" id="userid">
+                Đang tải...
+            </span>
+        </div>
 
     </div>
+
+
+    <button onclick="startApp()">
+        🚀 Bắt đầu
+    </button>
+
+    <div class="status" id="status">
+        ● Đã kết nối với Telegram
+    </div>
+
 </div>
+
 
 <script>
 
+    // Kết nối Telegram Mini App
     const tg = window.Telegram.WebApp;
 
     tg.ready();
     tg.expand();
 
+
+    // Lấy thông tin người dùng
     const user = tg.initDataUnsafe.user;
+
 
     if (user) {
 
-        document.getElementById("user-info").innerHTML =
-            "Xin chào <b>" +
-            (user.first_name || "") +
-            "</b> 👋<br><br>" +
-            "Bạn đã kết nối thành công với Telegram.";
+        const firstName = user.first_name || "";
+        const lastName = user.last_name || "";
+
+        const fullName =
+            (firstName + " " + lastName).trim();
+
+        document.getElementById("welcome").innerText =
+            "Xin chào, " + firstName + " 👋";
+
+        document.getElementById("name").innerText =
+            fullName || "Không có";
+
+        document.getElementById("username").innerText =
+            user.username
+                ? "@" + user.username
+                : "Không có";
+
+        document.getElementById("userid").innerText =
+            user.id;
+
+        // Nếu Telegram có ảnh đại diện
+        if (user.photo_url) {
+
+            document.getElementById("avatar").innerHTML =
+                '<img src="' +
+                user.photo_url +
+                '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+
+        } else {
+
+            // Lấy chữ cái đầu tên
+            document.getElementById("avatar").innerText =
+                firstName
+                    ? firstName.charAt(0).toUpperCase()
+                    : "👤";
+        }
 
     } else {
 
-        document.getElementById("user-info").innerText =
-            "Không lấy được thông tin Telegram.";
+        document.getElementById("status").innerText =
+            "⚠️ Không tìm thấy tài khoản Telegram";
 
     }
 
-    function showUser() {
 
-        if (!user) {
-            alert("Không tìm thấy tài khoản Telegram.");
-            return;
-        }
+    // Nút Bắt đầu
+    function startApp() {
 
-        alert(
-            "Tên: " + (user.first_name || "") +
-            "\nUsername: @" + (user.username || "Không có") +
-            "\nID: " + user.id
+        tg.HapticFeedback.impactOccurred("medium");
+
+        document.getElementById("status").innerText =
+            "🚀 Bạn đã bắt đầu Mini App!";
+
+        tg.showAlert(
+            "Chào mừng bạn đến với Mini App 🚀"
         );
 
     }
