@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Mini App</title>
+    <title>Tài khoản cá nhân</title>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
@@ -26,35 +26,42 @@
             width: 100%;
             max-width: 480px;
             margin: auto;
-            padding: 25px 18px;
+            padding: 25px 18px 40px;
         }
 
-        .header {
+        .profile {
             text-align: center;
-            margin-top: 20px;
-            margin-bottom: 25px;
+            padding: 20px 0 30px;
         }
 
         .avatar {
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             margin: auto;
             border-radius: 50%;
+            background: #229ED9;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            background: #229ED9;
+            font-size: 42px;
+            font-weight: bold;
+            overflow: hidden;
         }
 
-        .header h1 {
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile h1 {
             margin: 15px 0 5px;
-            font-size: 26px;
+            font-size: 25px;
         }
 
-        .header p {
-            margin: 0;
-            opacity: 0.7;
+        .username {
+            opacity: 0.6;
+            font-size: 15px;
         }
 
         .card {
@@ -63,60 +70,90 @@
                 #1f2937
             );
 
-            border-radius: 20px;
-            padding: 22px;
-            margin-bottom: 18px;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 16px;
         }
 
         .card-title {
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 18px;
+            margin-bottom: 15px;
         }
 
-        .info {
+        .row {
             display: flex;
             justify-content: space-between;
-            padding: 13px 0;
-            border-bottom: 1px solid rgba(128,128,128,0.2);
+            gap: 15px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(128,128,128,0.18);
         }
 
-        .info:last-child {
+        .row:last-child {
             border-bottom: none;
         }
 
         .label {
-            opacity: 0.65;
+            opacity: 0.6;
         }
 
         .value {
             font-weight: bold;
-            max-width: 60%;
-            overflow-wrap: anywhere;
             text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(128,128,128,0.18);
+        }
+
+        .menu:last-child {
+            border-bottom: none;
+        }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(34,158,217,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .arrow {
+            opacity: 0.5;
+            font-size: 20px;
         }
 
         button {
             width: 100%;
-            padding: 16px;
             border: none;
             border-radius: 14px;
+            padding: 16px;
             background: #229ED9;
             color: white;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:active {
-            transform: scale(0.98);
+            margin-top: 5px;
         }
 
         .status {
             text-align: center;
-            font-size: 14px;
-            opacity: 0.65;
             margin-top: 18px;
+            font-size: 13px;
+            opacity: 0.55;
         }
     </style>
 </head>
@@ -125,58 +162,145 @@
 
 <div class="container">
 
-    <div class="header">
+    <!-- PROFILE -->
+
+    <div class="profile">
 
         <div class="avatar" id="avatar">
             👤
         </div>
 
-        <h1 id="welcome">
-            Xin chào 👋
+        <h1 id="name">
+            Đang tải...
         </h1>
 
-        <p>
-            Telegram Mini App
-        </p>
+        <div class="username" id="username">
+            @username
+        </div>
 
     </div>
 
+
+    <!-- ACCOUNT INFORMATION -->
 
     <div class="card">
 
         <div class="card-title">
-            👤 Thông tin tài khoản
+            🆔 Thông tin tài khoản
         </div>
 
-        <div class="info">
-            <span class="label">Tên</span>
-            <span class="value" id="name">
-                Đang tải...
+        <div class="row">
+            <span class="label">
+                Họ và tên
+            </span>
+
+            <span class="value" id="fullname">
+                ...
             </span>
         </div>
 
-        <div class="info">
-            <span class="label">Username</span>
-            <span class="value" id="username">
-                Đang tải...
+        <div class="row">
+            <span class="label">
+                Username
+            </span>
+
+            <span class="value" id="user">
+                ...
             </span>
         </div>
 
-        <div class="info">
-            <span class="label">Telegram ID</span>
+        <div class="row">
+            <span class="label">
+                Telegram ID
+            </span>
+
             <span class="value" id="userid">
-                Đang tải...
+                ...
             </span>
         </div>
 
     </div>
 
 
-    <button onclick="startApp()">
-        🚀 Bắt đầu
+    <!-- MENU -->
+
+    <div class="card">
+
+        <div class="card-title">
+            ⚙️ Cài đặt
+        </div>
+
+        <div class="menu" onclick="comingSoon()">
+
+            <div class="menu-left">
+
+                <div class="icon">
+                    🔔
+                </div>
+
+                <span>
+                    Thông báo
+                </span>
+
+            </div>
+
+            <span class="arrow">
+                ›
+            </span>
+
+        </div>
+
+
+        <div class="menu" onclick="comingSoon()">
+
+            <div class="menu-left">
+
+                <div class="icon">
+                    🌙
+                </div>
+
+                <span>
+                    Giao diện
+                </span>
+
+            </div>
+
+            <span class="arrow">
+                ›
+            </span>
+
+        </div>
+
+
+        <div class="menu" onclick="comingSoon()">
+
+            <div class="menu-left">
+
+                <div class="icon">
+                    🔐
+                </div>
+
+                <span>
+                    Bảo mật
+                </span>
+
+            </div>
+
+            <span class="arrow">
+                ›
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <button onclick="closeApp()">
+        Đóng Mini App
     </button>
 
-    <div class="status" id="status">
+
+    <div class="status">
         ● Đã kết nối với Telegram
     </div>
 
@@ -185,75 +309,98 @@
 
 <script>
 
-    // Kết nối Telegram Mini App
     const tg = window.Telegram.WebApp;
 
     tg.ready();
+
     tg.expand();
 
 
-    // Lấy thông tin người dùng
     const user = tg.initDataUnsafe.user;
 
 
     if (user) {
 
-        const firstName = user.first_name || "";
-        const lastName = user.last_name || "";
+        const firstName =
+            user.first_name || "";
+
+        const lastName =
+            user.last_name || "";
 
         const fullName =
             (firstName + " " + lastName).trim();
 
-        document.getElementById("welcome").innerText =
-            "Xin chào, " + firstName + " 👋";
 
-        document.getElementById("name").innerText =
+        document.getElementById("name")
+            .innerText =
+            firstName || "Người dùng";
+
+
+        document.getElementById("fullname")
+            .innerText =
             fullName || "Không có";
 
-        document.getElementById("username").innerText =
+
+        document.getElementById("user")
+            .innerText =
             user.username
                 ? "@" + user.username
                 : "Không có";
 
-        document.getElementById("userid").innerText =
+
+        document.getElementById("userid")
+            .innerText =
             user.id;
 
-        // Nếu Telegram có ảnh đại diện
+
+        document.getElementById("username")
+            .innerText =
+            user.username
+                ? "@" + user.username
+                : "Telegram";
+
+
+        const avatar =
+            document.getElementById("avatar");
+
+
         if (user.photo_url) {
 
-            document.getElementById("avatar").innerHTML =
+            avatar.innerHTML =
                 '<img src="' +
                 user.photo_url +
-                '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+                '" alt="Avatar">';
 
         } else {
 
-            // Lấy chữ cái đầu tên
-            document.getElementById("avatar").innerText =
+            avatar.innerText =
                 firstName
                     ? firstName.charAt(0).toUpperCase()
                     : "👤";
+
         }
-
-    } else {
-
-        document.getElementById("status").innerText =
-            "⚠️ Không tìm thấy tài khoản Telegram";
 
     }
 
 
-    // Nút Bắt đầu
-    function startApp() {
+    function comingSoon() {
 
-        tg.HapticFeedback.impactOccurred("medium");
-
-        document.getElementById("status").innerText =
-            "🚀 Bạn đã bắt đầu Mini App!";
+        tg.HapticFeedback
+            .impactOccurred("light");
 
         tg.showAlert(
-            "Chào mừng bạn đến với Mini App 🚀"
+            "Tính năng này sẽ được phát triển ở bước tiếp theo."
         );
+
+    }
+
+
+    function closeApp() {
+
+        tg.HapticFeedback
+            .impactOccurred("medium");
+
+        tg.close();
 
     }
 
